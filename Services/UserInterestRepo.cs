@@ -32,12 +32,11 @@ namespace Labb4_API.Services
 
         public async Task<IEnumerable<InterestLink>> GetLinks(int id)
         {
-            var result = from i in _appDbContext.UserInterests
-                         join k in _appDbContext.InterestLinks on i.InterestLinkID equals k.InterestLinkID
-                         join u in _appDbContext.Users on i.UserID equals u.Id
-                         where i.UserID == id
-                         select k;
-            return await result.ToListAsync();
+            var result = await _appDbContext.InterestLinks.Where(i => i.UserInterest.UserID == id).Select(u => new InterestLink
+            {
+                Link = u.Link
+            }).ToListAsync();
+            return result;
         }
     }
 }

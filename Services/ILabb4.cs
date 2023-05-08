@@ -8,7 +8,7 @@ namespace Labb4_API.Services
 
         Task<T> GetSingle(int id);
 
-        Task<InterestLink> Add(string link, int id, int interestid);
+        Task<InterestLink> Add(string newlink, int userid, int interestid);
 
         Task<T> Update(T entity);
 

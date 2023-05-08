@@ -30,7 +30,7 @@ namespace Labb4_API.Services
             var result = from i in _appDbContext.Interests
                          join k in _appDbContext.UserInterests on i.InterestID equals k.InterestID
                          join u in _appDbContext.Users on k.UserID equals u.Id
-                         where k.UserID == id
+                         where u.Id == id
                          select i;
             return await result.ToListAsync();
         }

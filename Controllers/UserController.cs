@@ -16,7 +16,7 @@ namespace Labb4_API.Controllers
             _labbApi = labbApi;
         }
 
-        [HttpGet]
+        [HttpGet("/GetAllUsers")]
         public async Task<IActionResult> GetAllUsers()
         {
             try
@@ -46,12 +46,12 @@ namespace Labb4_API.Controllers
             }
         }
         [HttpPost("/AddLink")]
-        public async Task<IActionResult> AddLink(string link, int id, int interestid)
+        public async Task<IActionResult> AddLink(string newlink, int userid, int interestid)
         {
             try
             {
-                var result = await _labbApi.Add(link, id, interestid);
-                return Ok(result);
+                var result = _labbApi.Add(newlink, userid, interestid);
+                return Ok(await result);
             }
             catch (Exception)
             {

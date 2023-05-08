@@ -14,44 +14,25 @@ namespace Labb4_API.Services
             _appDbContext = appDbContext;
         }
 
-        public async Task<InterestLink> Add(string newLink, int id, int interestid)
-        {
-            //var user = from u in _appDbContext.Users
-            //           join k in _appDbContext.UserInterests on u.Id equals k.UserID
-            //           join i in _appDbContext.InterestLinks on k.InterestLinkID equals i.InterestLinkID
-            //           where u.Id == id
-            //           select u;
 
+        public async Task<InterestLink> Add(string newlink, int userid, int interestid)
+        {
+            var result = await _appDbContext.UserInterests
+                .FirstOrDefaultAsync(p => p.UserID == userid && p.InterestID == interestid);
+            if (result == null)
+            {
+                return null;
+            }
             var link = new InterestLink()
             {
-                Link = newLink
-            };
-            var userinterest = new UserInterest()
-            {
-                UserID = id,
-                InterestID = interestid
+                Link = newlink,
+                UserInterest = result
             };
 
             await _appDbContext.InterestLinks.AddAsync(link);
-            await _appDbContext.UserInterests.AddAsync(userinterest);
             await _appDbContext.SaveChangesAsync();
             return link;
         }
-        //public async Task<InterestLink> Add(InterestLink newLink, UserInterest userinterest)
-        //{
-        //    if (newLink == null)
-        //    {
-        //        return null;
-        //    }
-        //    if (userinterest == null)
-        //    {
-        //        return null;
-        //    }
-        //    _appDbContext.InterestLinks.Add(newLink);
-        //    _appDbContext.UserInterests.Add(userinterest);
-        //    await _appDbContext.SaveChangesAsync();
-        //    return newLink;
-        //}
 
         public async Task<IEnumerable<User>> GetAll()
         {

@@ -15,7 +15,7 @@ namespace Labb4_API.Controllers
             _labbApi = labbApi;
         }
 
-        [HttpPost]
+        [HttpPost("/UserToNewInterest")]
         public async Task<IActionResult> AddUserInterest(UserInterestDTO newInterest)
         {
             try
@@ -23,7 +23,6 @@ namespace Labb4_API.Controllers
                 var result = new UserInterest();
                 result.UserID = newInterest.UserID;
                 result.InterestID = newInterest.InterestID;
-                result.InterestLinkID = newInterest.InterestLinkID;
                 return Ok(await _labbApi.Add(result));
 
             }

@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Labb4_API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230427111357_Added InterestLinks to AppDbContext")]
-    partial class AddedInterestLinkstoAppDbContext
+    [Migration("20230508215404_pls help")]
+    partial class plshelp
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,12 +38,7 @@ namespace Labb4_API.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
-
                     b.HasKey("InterestID");
-
-                    b.HasIndex("UserID");
 
                     b.ToTable("Interests");
 
@@ -52,29 +47,25 @@ namespace Labb4_API.Migrations
                         {
                             InterestID = 1,
                             InterestDesc = "Skateboarding",
-                            Name = "Skateboarding",
-                            UserID = 1
+                            Name = "Skateboarding"
                         },
                         new
                         {
                             InterestID = 2,
                             InterestDesc = "Developing Software on the computer",
-                            Name = "Computers",
-                            UserID = 2
+                            Name = "Computers"
                         },
                         new
                         {
                             InterestID = 3,
                             InterestDesc = "Riding a board on waves in the water",
-                            Name = "Surfing",
-                            UserID = 3
+                            Name = "Surfing"
                         },
                         new
                         {
                             InterestID = 4,
                             InterestDesc = "Riding a board on snow",
-                            Name = "Snowboarding",
-                            UserID = 3
+                            Name = "Snowboarding"
                         });
                 });
 
@@ -86,15 +77,15 @@ namespace Labb4_API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InterestLinkID"));
 
-                    b.Property<int>("InterestID")
-                        .HasColumnType("int");
-
                     b.Property<string>("Link")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("UserInterestID")
+                        .HasColumnType("int");
+
                     b.HasKey("InterestLinkID");
 
-                    b.HasIndex("InterestID");
+                    b.HasIndex("UserInterestID");
 
                     b.ToTable("InterestLinks");
 
@@ -102,26 +93,26 @@ namespace Labb4_API.Migrations
                         new
                         {
                             InterestLinkID = 1,
-                            InterestID = 1,
-                            Link = "https://en.wikipedia.org/wiki/Skateboarding"
+                            Link = "https://en.wikipedia.org/wiki/Skateboarding",
+                            UserInterestID = 1
                         },
                         new
                         {
                             InterestLinkID = 2,
-                            InterestID = 2,
-                            Link = "https://www.ibm.com/topics/software-development"
+                            Link = "https://www.ibm.com/topics/software-development",
+                            UserInterestID = 2
                         },
                         new
                         {
                             InterestLinkID = 3,
-                            InterestID = 3,
-                            Link = "https://en.wikipedia.org/wiki/Surfing"
+                            Link = "https://en.wikipedia.org/wiki/Surfing",
+                            UserInterestID = 3
                         },
                         new
                         {
                             InterestLinkID = 4,
-                            InterestID = 4,
-                            Link = "https://en.wikipedia.org/wiki/Snowboarding"
+                            Link = "https://en.wikipedia.org/wiki/Snowboarding",
+                            UserInterestID = 4
                         });
                 });
 
@@ -170,36 +161,83 @@ namespace Labb4_API.Migrations
                         });
                 });
 
-            modelBuilder.Entity("API_Models.Interest", b =>
+            modelBuilder.Entity("API_Models.UserInterest", b =>
                 {
-                    b.HasOne("API_Models.User", "User")
-                        .WithMany("Interest")
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("UserInterestID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.Navigation("User");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserInterestID"));
+
+                    b.Property<int>("InterestID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserInterestID");
+
+                    b.HasIndex("InterestID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("UserInterests");
+
+                    b.HasData(
+                        new
+                        {
+                            UserInterestID = 1,
+                            InterestID = 1,
+                            UserID = 1
+                        },
+                        new
+                        {
+                            UserInterestID = 2,
+                            InterestID = 2,
+                            UserID = 2
+                        },
+                        new
+                        {
+                            UserInterestID = 3,
+                            InterestID = 3,
+                            UserID = 3
+                        },
+                        new
+                        {
+                            UserInterestID = 4,
+                            InterestID = 4,
+                            UserID = 3
+                        });
                 });
 
             modelBuilder.Entity("API_Models.InterestLink", b =>
                 {
-                    b.HasOne("API_Models.Interest", "Interests")
-                        .WithMany("InterestLinks")
+                    b.HasOne("API_Models.UserInterest", "UserInterest")
+                        .WithMany()
+                        .HasForeignKey("UserInterestID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("UserInterest");
+                });
+
+            modelBuilder.Entity("API_Models.UserInterest", b =>
+                {
+                    b.HasOne("API_Models.Interest", "Interest")
+                        .WithMany()
                         .HasForeignKey("InterestID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Interests");
-                });
+                    b.HasOne("API_Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-            modelBuilder.Entity("API_Models.Interest", b =>
-                {
-                    b.Navigation("InterestLinks");
-                });
-
-            modelBuilder.Entity("API_Models.User", b =>
-                {
                     b.Navigation("Interest");
+
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

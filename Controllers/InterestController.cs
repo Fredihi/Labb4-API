@@ -16,7 +16,7 @@ namespace Labb4_API.Controllers
         }
 
 
-        [HttpGet]
+        [HttpGet("/GetAllInterests")]
         public async Task<IActionResult> GetAllInterests()
         {
             try
@@ -30,7 +30,7 @@ namespace Labb4_API.Controllers
             }
         }
 
-        [HttpGet("{id:int}")]
+        [HttpGet("{id:int}/GetUsersInterests/")]
         public async Task<IActionResult> GetSingleInterest(int id)
         {
             var result = await _interestApi.GetSingle(id);

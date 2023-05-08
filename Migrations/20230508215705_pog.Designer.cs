@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Labb4_API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230507201326_Added UserInterest as Connection table")]
-    partial class AddedUserInterestasConnectiontable
+    [Migration("20230508215705_pog")]
+    partial class pog
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -80,7 +80,12 @@ namespace Labb4_API.Migrations
                     b.Property<string>("Link")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("UserInterestID")
+                        .HasColumnType("int");
+
                     b.HasKey("InterestLinkID");
+
+                    b.HasIndex("UserInterestID");
 
                     b.ToTable("InterestLinks");
 
@@ -88,22 +93,26 @@ namespace Labb4_API.Migrations
                         new
                         {
                             InterestLinkID = 1,
-                            Link = "https://en.wikipedia.org/wiki/Skateboarding"
+                            Link = "https://en.wikipedia.org/wiki/Skateboarding",
+                            UserInterestID = 1
                         },
                         new
                         {
                             InterestLinkID = 2,
-                            Link = "https://www.ibm.com/topics/software-development"
+                            Link = "https://www.ibm.com/topics/software-development",
+                            UserInterestID = 2
                         },
                         new
                         {
                             InterestLinkID = 3,
-                            Link = "https://en.wikipedia.org/wiki/Surfing"
+                            Link = "https://en.wikipedia.org/wiki/Surfing",
+                            UserInterestID = 3
                         },
                         new
                         {
                             InterestLinkID = 4,
-                            Link = "https://en.wikipedia.org/wiki/Snowboarding"
+                            Link = "https://en.wikipedia.org/wiki/Snowboarding",
+                            UserInterestID = 4
                         });
                 });
 
@@ -163,17 +172,12 @@ namespace Labb4_API.Migrations
                     b.Property<int>("InterestID")
                         .HasColumnType("int");
 
-                    b.Property<int>("InterestLinkID")
-                        .HasColumnType("int");
-
                     b.Property<int>("UserID")
                         .HasColumnType("int");
 
                     b.HasKey("UserInterestID");
 
                     b.HasIndex("InterestID");
-
-                    b.HasIndex("InterestLinkID");
 
                     b.HasIndex("UserID");
 
@@ -184,30 +188,37 @@ namespace Labb4_API.Migrations
                         {
                             UserInterestID = 1,
                             InterestID = 1,
-                            InterestLinkID = 1,
                             UserID = 1
                         },
                         new
                         {
                             UserInterestID = 2,
                             InterestID = 2,
-                            InterestLinkID = 2,
                             UserID = 2
                         },
                         new
                         {
                             UserInterestID = 3,
                             InterestID = 3,
-                            InterestLinkID = 3,
                             UserID = 3
                         },
                         new
                         {
                             UserInterestID = 4,
                             InterestID = 4,
-                            InterestLinkID = 4,
                             UserID = 3
                         });
+                });
+
+            modelBuilder.Entity("API_Models.InterestLink", b =>
+                {
+                    b.HasOne("API_Models.UserInterest", "UserInterest")
+                        .WithMany()
+                        .HasForeignKey("UserInterestID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("UserInterest");
                 });
 
             modelBuilder.Entity("API_Models.UserInterest", b =>
@@ -218,12 +229,6 @@ namespace Labb4_API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("API_Models.InterestLink", "InterestLink")
-                        .WithMany()
-                        .HasForeignKey("InterestLinkID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("API_Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserID")
@@ -231,8 +236,6 @@ namespace Labb4_API.Migrations
                         .IsRequired();
 
                     b.Navigation("Interest");
-
-                    b.Navigation("InterestLink");
 
                     b.Navigation("User");
                 });

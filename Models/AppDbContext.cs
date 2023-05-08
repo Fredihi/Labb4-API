@@ -23,10 +23,10 @@ namespace Labb4_API.Models
             modelBuilder.Entity<User>().HasData(new User { Id = 2, FirstName = "Adrian", LastName = "Lundell", Phone = "070632175"});
             modelBuilder.Entity<User>().HasData(new User { Id = 3, FirstName = "Sam", LastName = "Svensson", Phone = "070154323"});
 
-            modelBuilder.Entity<UserInterest>().HasData(new UserInterest { UserInterestID = 1, UserID = 1, InterestID = 1, InterestLinkID = 1 });
-            modelBuilder.Entity<UserInterest>().HasData(new UserInterest { UserInterestID = 2, UserID = 2, InterestID = 2, InterestLinkID = 2 });
-            modelBuilder.Entity<UserInterest>().HasData(new UserInterest { UserInterestID = 3, UserID = 3, InterestID = 3, InterestLinkID = 3 });
-            modelBuilder.Entity<UserInterest>().HasData(new UserInterest { UserInterestID = 4, UserID = 3, InterestID = 4, InterestLinkID = 4 });
+            modelBuilder.Entity<UserInterest>().HasData(new UserInterest { UserInterestID = 1, UserID = 1, InterestID = 1 });
+            modelBuilder.Entity<UserInterest>().HasData(new UserInterest { UserInterestID = 2, UserID = 2, InterestID = 2 });
+            modelBuilder.Entity<UserInterest>().HasData(new UserInterest { UserInterestID = 3, UserID = 3, InterestID = 3 });
+            modelBuilder.Entity<UserInterest>().HasData(new UserInterest { UserInterestID = 4, UserID = 3, InterestID = 4 });
 
             //Interest Seed
             modelBuilder.Entity<Interest>().HasData(new Interest
@@ -59,23 +59,25 @@ namespace Labb4_API.Models
             {
                 InterestLinkID = 1,
                 Link = "https://en.wikipedia.org/wiki/Skateboarding",
-
+                UserInterestID = 1
             });
             modelBuilder.Entity<InterestLink>().HasData(new InterestLink
             {
                 InterestLinkID = 2,
                 Link = "https://www.ibm.com/topics/software-development",
-
+                UserInterestID = 2
             });
             modelBuilder.Entity<InterestLink>().HasData(new InterestLink
             {
                 InterestLinkID = 3,
-                Link = "https://en.wikipedia.org/wiki/Surfing"
+                Link = "https://en.wikipedia.org/wiki/Surfing",
+                UserInterestID = 3
             });
             modelBuilder.Entity<InterestLink>().HasData(new InterestLink
             {
                 InterestLinkID = 4,
                 Link = "https://en.wikipedia.org/wiki/Snowboarding",
+                UserInterestID = 4
             });
         }
     }
